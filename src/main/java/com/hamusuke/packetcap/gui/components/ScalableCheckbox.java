@@ -13,8 +13,8 @@ import net.minecraft.util.Mth;
 public class ScalableCheckbox extends AbstractButton {
     protected static final ResourceLocation TEXTURE = new ResourceLocation("textures/gui/checkbox.png");
     protected static final int TEXT_COLOR = 14737632;
-    protected boolean selected;
     protected final boolean showLabel;
+    protected boolean selected;
 
     public ScalableCheckbox(int x, int y, int width, int height, Component component, boolean selected) {
         this(x, y, width, height, component, selected, true);

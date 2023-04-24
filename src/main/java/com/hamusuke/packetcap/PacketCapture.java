@@ -43,13 +43,12 @@ import java.util.concurrent.atomic.AtomicLong;
 @Mod(PacketCapture.MOD_ID)
 public final class PacketCapture {
     public static final String MOD_ID = "packetcapture";
+    public static final ResourceLocation MONO_FONT = new ResourceLocation(MOD_ID, "mono");
     private static final Logger LOGGER = LogManager.getLogger();
-    private static PacketCapture instance;
     private static final int MAX_PACKET_SIZE = 16384;
     private static final KeyMapping RENDER_CAPTURE_OVERLAY = new KeyMapping(MOD_ID + ".key.render_cap", GLFW.GLFW_KEY_HOME, KeyMapping.CATEGORY_MISC);
     private static final KeyMapping OPEN_PACKET_LIST_SCREEN = new KeyMapping(MOD_ID + ".key.open.packetListScreen", GLFW.GLFW_KEY_END, KeyMapping.CATEGORY_MISC);
     private static final Gson GSON = new Gson();
-    public static final ResourceLocation MONO_FONT = new ResourceLocation(MOD_ID, "mono");
     private static final Set<PacketFilter> DEFAULT_PACKET_FILTERS = Set.of(
             new PacketFilter("Chunk", FilterType.CONTAINS),
             new PacketFilter("Motion", FilterType.CONTAINS),
@@ -68,10 +67,10 @@ public final class PacketCapture {
             new PacketFilter("TeleportEntity", FilterType.CONTAINS),
             new PacketFilter("EntityEvent", FilterType.CONTAINS)
     );
+    private static PacketCapture instance;
     private final Minecraft mc;
     private final PacketCaptureOverlay overlay;
     private final PacketListScreen screen;
-    private boolean showCapture;
     private final Path filterConfig;
     private final Path fieldsCsv;
     private final boolean deobfuscationEnabled;
@@ -84,6 +83,7 @@ public final class PacketCapture {
     private final AtomicLong receivedPacketNum = new AtomicLong();
     private final List<PacketDetails> sentPackets = Collections.synchronizedList(Lists.newLinkedList());
     private final List<PacketDetails> receivedPackets = Collections.synchronizedList(Lists.newLinkedList());
+    private boolean showCapture;
 
     public PacketCapture() {
         instance = this;
@@ -97,6 +97,15 @@ public final class PacketCapture {
         this.loadFilters();
         MinecraftForge.EVENT_BUS.register(this);
         FMLJavaModLoadingContext.get().getModEventBus().addListener(PacketCapture::registerKeyBinding);
+    }
+
+    private static void registerKeyBinding(RegisterKeyMappingsEvent event) {
+        event.register(RENDER_CAPTURE_OVERLAY);
+        event.register(OPEN_PACKET_LIST_SCREEN);
+    }
+
+    public static PacketCapture getInstance() {
+        return instance;
     }
 
     @SubscribeEvent
@@ -182,11 +191,6 @@ public final class PacketCapture {
         return ImmutableSet.copyOf(this.packetFilters);
     }
 
-    private static void registerKeyBinding(RegisterKeyMappingsEvent event) {
-        event.register(RENDER_CAPTURE_OVERLAY);
-        event.register(OPEN_PACKET_LIST_SCREEN);
-    }
-
     public void addToReceived(PacketDetails details) {
         this.receivedPacketNum.incrementAndGet();
         if (details instanceof DedicatedPacket dedicatedPacket) {
@@ -258,10 +262,6 @@ public final class PacketCapture {
         if (this.showCapture) {
             this.overlay.render(event.getPoseStack());
         }
-    }
-
-    public static PacketCapture getInstance() {
-        return instance;
     }
 
     public ImmutableList<PacketDetails> getSentPackets() {

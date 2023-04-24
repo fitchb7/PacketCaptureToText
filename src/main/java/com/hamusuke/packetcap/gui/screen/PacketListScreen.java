@@ -28,9 +28,9 @@ public class PacketListScreen extends Screen {
     private static final Component SENT = Component.translatable(PacketCapture.MOD_ID + ".sent").withStyle(style -> style.withFont(PacketCapture.MONO_FONT));
     private static final Component RECEIVED = Component.translatable(PacketCapture.MOD_ID + ".received").withStyle(style -> style.withFont(PacketCapture.MONO_FONT));
     private static final Component AUTO_SCROLL = Component.translatable(PacketCapture.MOD_ID + ".auto_scroll").withStyle(style -> style.withFont(PacketCapture.MONO_FONT));
+    private final PacketCapture capture;
     @Nullable
     private Screen parent;
-    private final PacketCapture capture;
     private PacketList sentPackets;
     private PacketList receivedPackets;
     private ScalableCheckbox autoTxScroll;

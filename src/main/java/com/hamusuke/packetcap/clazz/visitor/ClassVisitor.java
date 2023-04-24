@@ -21,22 +21,6 @@ public class ClassVisitor {
         this.instance = instance;
     }
 
-    protected synchronized void visitClass() {
-        var fields = getFields(this.clazz);
-        for (var field : fields) {
-            this.fields.add(new SimpleClassField(field, this.instance));
-        }
-    }
-
-    public final synchronized void visit() {
-        if (!this.fields.isEmpty() || !this.visitable()) {
-            return;
-        }
-
-        this.visited = true;
-        this.visitClass();
-    }
-
     private static List<Field> getFields(Class<?> clazz) {
         var fields = Lists.newArrayList(clazz.getDeclaredFields());
         var superclass = clazz.getSuperclass();
@@ -55,6 +39,22 @@ public class ClassVisitor {
         }
 
         return stringBuilder.append(clazz.getSimpleName()).toString();
+    }
+
+    protected synchronized void visitClass() {
+        var fields = getFields(this.clazz);
+        for (var field : fields) {
+            this.fields.add(new SimpleClassField(field, this.instance));
+        }
+    }
+
+    public final synchronized void visit() {
+        if (!this.fields.isEmpty() || !this.visitable()) {
+            return;
+        }
+
+        this.visited = true;
+        this.visitClass();
     }
 
     public String getClassName() {

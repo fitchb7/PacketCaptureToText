@@ -3,24 +3,12 @@ package com.hamusuke.packetcap.clazz.field;
 import com.google.common.primitives.Primitives;
 import com.hamusuke.packetcap.clazz.visitor.*;
 import com.hamusuke.packetcap.utils.ObjectUtil;
-import org.apache.commons.compress.utils.Lists;
-import org.apache.commons.lang3.ObjectUtils;
 
 import javax.annotation.Nullable;
-import java.lang.reflect.Array;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 public interface ClassField {
-    @Nullable
-    default ClassVisitor getVisitor() {
-        return null;
-    }
-
-    String getDescription();
-
     @Nullable
     static ClassVisitor findClassVisitor(Object obj) {
         if (obj != null) {
@@ -39,4 +27,11 @@ public interface ClassField {
 
         return null;
     }
+
+    @Nullable
+    default ClassVisitor getVisitor() {
+        return null;
+    }
+
+    String getDescription();
 }
