@@ -36,7 +36,7 @@ authors="hamusuke2303" #optional
 description='''
 This is a mod that adds packet-capturing screen/overlay.
 
-You can see Minecraft networking.
+You can peek Minecraft network.
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.packetcapture]] #optional
