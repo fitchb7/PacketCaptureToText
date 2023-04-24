@@ -1,13 +1,11 @@
 package com.hamusuke.packetcap.clazz.field;
 
-import com.google.common.primitives.Primitives;
 import com.hamusuke.packetcap.PacketCapture;
-import com.hamusuke.packetcap.clazz.visitor.*;
+import com.hamusuke.packetcap.clazz.visitor.ClassVisitor;
+import com.hamusuke.packetcap.clazz.visitor.StringConvertibleClassVisitor;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
-import java.util.Collection;
-import java.util.Map;
 
 public class SimpleClassField implements ClassField {
     private final String fieldName;
