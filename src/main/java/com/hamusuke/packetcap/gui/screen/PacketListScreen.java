@@ -119,6 +119,35 @@ public class PacketListScreen extends Screen {
         }
 
         @Override
+        public boolean isMouseOver(double p_93479_, double p_93480_) {
+            return p_93480_ >= (double) this.y0 && p_93480_ <= (double) this.y1;
+        }
+
+        @Override
+        public boolean mouseClicked(double p_93420_, double p_93421_, int p_93422_) {
+            this.updateScrollingState(p_93420_, p_93421_, p_93422_);
+
+            if (!this.isMouseOver(p_93420_, p_93421_)) {
+                return false;
+            }
+
+            for (var child : this.children()) {
+                if (child.mouseClicked(p_93420_, p_93421_, p_93422_)) {
+                    this.setFocused(child);
+                    this.setDragging(true);
+                    return true;
+                }
+            }
+
+            if (p_93422_ == 0) {
+                this.clickedHeader((int) (p_93420_ - (double) (this.x0 + this.width / 2 - this.getRowWidth() / 2)), (int) (p_93421_ - (double) this.y0) + (int) this.getScrollAmount() - 4);
+                return true;
+            }
+
+            return this.scrolling;
+        }
+
+        @Override
         protected void renderDecorations(PoseStack p_93443_, int p_93444_, int p_93445_) {
             var width = this.minecraft.font.width(this.type.text);
             var x = this.minecraft.font.drawShadow(p_93443_, this.type.text, (this.getRight() + this.getLeft()) / 2.0F - width / 2.0F, this.getTop() - 10, 16777215);

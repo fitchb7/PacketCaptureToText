@@ -154,7 +154,6 @@ public final class PacketCapture {
             list.forEach(m -> this.packetFilters.add(new PacketFilter(m.get("filteredBy"), m.get("filterType"))));
         } catch (Throwable e) {
             LOGGER.warn("Failed to load packet filters", e);
-            file.delete();
             this.packetFilters.clear();
             this.packetFilters.addAll(DEFAULT_PACKET_FILTERS);
             this.saveFilters();
@@ -162,11 +161,14 @@ public final class PacketCapture {
     }
 
     private synchronized void saveFilters() {
+        this.filterConfig.toFile().delete();
+
         try (var w = Files.newBufferedWriter(this.filterConfig, StandardCharsets.UTF_8, StandardOpenOption.CREATE);
              var jsonW = new JsonWriter(w)
         ) {
             jsonW.setIndent("  ");
             GSON.toJson(this.packetFilters, List.class, jsonW);
+            jsonW.flush();
         } catch (IOException e) {
             LOGGER.warn("Failed to save packet filters", e);
         }
