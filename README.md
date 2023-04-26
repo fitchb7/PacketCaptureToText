@@ -1,4 +1,4 @@
-# Packet Capture
+# [Packet Capture](https://legacy.curseforge.com/minecraft/mc-mods/packet-capture)
 
 ## License
 
